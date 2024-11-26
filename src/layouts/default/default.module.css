@@ -1,0 +1,8 @@
+.default {
+  display: grid;
+  align-items: start;
+  grid-template-rows: auto 1fr auto;
+
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+}

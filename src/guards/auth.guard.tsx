@@ -1,34 +1,16 @@
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useContext } from "react";
 import { Navigate, Outlet } from "react-router";
 
+import { AuthContext } from "../providers/auth.provider.tsx";
+
 export default function AuthGuard(): ReactElement {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
+  const { loading, user } = useContext(AuthContext);
 
-  useEffect(() => {
-    const verify = async (): Promise<void> => {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/auth/verify`,
-        {
-          credentials: "include",
-        },
-      );
-
-      if (!response.ok) {
-        setIsAuthenticated(false);
-        return;
-      }
-
-      setIsAuthenticated(true);
-    };
-
-    verify().then();
-  }, []);
-
-  if (isAuthenticated === undefined) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/auth/sign-in" />;
   }
 
